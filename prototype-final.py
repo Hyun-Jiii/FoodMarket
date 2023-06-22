@@ -15,9 +15,21 @@ from datetime import date
 from streamlit_folium import folium_static
 import re
 import joblib
+# 폰트 관련 용도 as fm
+import matplotlib.font_manager as fm 
+
+# Fonts 파일에서 불러오기
+@st.cache_data
+def fontRegistered():
+    font_dirs = '/Fonts'
+    font_files = fm.findSystemFonts(fontpaths=font_dirs)
+
+    for font_file in font_files:
+        fm.fontManager.addfont(font_file)
+    fm._load_fontmanager(try_read_cache=False)
 
 # 시각화 한글폰트 설정
-plt.rc('font', family='Malgun Gothic')
+plt.rc('font', family='NanumGothic-Regular.ttf')
 sns.set(font="Malgun Gothic",#"NanumGothicCoding", 
 rc={"axes.unicode_minus":False}, # 마이너스 부호 깨짐 현상 해결
 style='darkgrid')
