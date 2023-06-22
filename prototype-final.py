@@ -29,7 +29,7 @@ class MyClass:
     
     # 재고 수량 함수 1
     def inventory(self, code_name):
-        test = pd.read_csv('기부물품대분류(가짜데이터).csv', encoding='UTF-8')
+        test = pd.read_csv('기부물품대분류(가짜데이터).csv', encoding='cp949')
         test.set_index(test.columns[0], inplace=True)
         return test.loc[code_name, '재고수량']
 
@@ -38,7 +38,7 @@ class MyClass:
     # ---> 어떻게 해결해야하나? 방법을 모르겠네
     # 근데 저절로 추가된 것만 빠지네?
     def inventory_cal(self, code_name):
-        test = pd.read_csv('기부물품대분류(가짜데이터).csv', encoding='UTF-8')
+        test = pd.read_csv('기부물품대분류(가짜데이터).csv', encoding='cp949')
         user_data = pd.read_excel('output3.xlsx')
 
         user_data_group = user_data.groupby('기부물품대분류코드', as_index=False)['수량'].sum()
@@ -61,13 +61,13 @@ class MyClass:
         result_test = test.set_index(test.columns[0])
         test_val = result_test.loc[code_name, '재고수량']
         test.drop('장부금액', axis=1, inplace=True)
-        test.to_csv('재고 계산된 기부물품대분류(가짜데이터).csv', index=False, encoding='UTF-8')
+        test.to_csv('재고 계산된 기부물품대분류(가짜데이터).csv', index=False, encoding='cp949')
         
         return test_val
 
     # 기부처 찾기 3
     def donate(self, needs):
-        donate_info = pd.read_csv('3.부산기부자정보조회(2016~2021년).csv', encoding='UTF-8')
+        donate_info = pd.read_csv('3.부산기부자정보조회(2016~2021년).csv', encoding='cp949')
         if needs == '신선식품':
             matching = '식품 도,소매업'
         elif needs == '일상용품':
@@ -80,7 +80,7 @@ class MyClass:
 
     # 부산 기부처 목록 4
     def find_busan_donors(self, search):
-        busan_donors = pd.read_csv('부산기부처목록.csv', encoding='UTF-8')
+        busan_donors = pd.read_csv('부산기부처목록.csv', encoding='cp949')
         return busan_donors[busan_donors['기부자명'].str.contains(search)]
 
     # 기부처 발굴 5
@@ -227,7 +227,7 @@ class MyClass:
         return sym_list[pred[0]]
 
 #     def predict_map(self):
-#         map_df = pd.read_csv('부산광역시_푸드뱅크 및 푸드마켓 현황_20230201.csv', encoding='UTF-8')
+#         map_df = pd.read_csv('부산광역시_푸드뱅크 및 푸드마켓 현황_20230201.csv', encoding='cp949')
 
 #         # 맵 생성
 #         map = folium.Map(location=[map_df['위도'].mean(), map_df['경도'].mean()], zoom_start=11)
@@ -310,7 +310,7 @@ def read_data():
 p = read_data()
 
 # 데이터 불러오기
-test = pd.read_csv('기부물품대분류(가짜데이터).csv', encoding='UTF-8')
+test = pd.read_csv('기부물품대분류(가짜데이터).csv', encoding='cp949')
 
 # tabs 만들기 
 tab1, tab2, tab3 = st.tabs(["이용 관리", "재고 확인", "기부처 발굴"])
@@ -510,7 +510,7 @@ with tab2:
     
     col010, col011 = st.columns(2)
     with col010:
-        all_donater = pd.read_csv('부산기부처목록.csv', encoding='UTF-8')        
+        all_donater = pd.read_csv('부산기부처목록.csv', encoding='cp949')        
         if st.button('모든 기부처 확인'):
             # st.dataframe(all_donater)
             st.session_state['opened_data'] = all_donater
@@ -529,8 +529,8 @@ with tab2:
     
     
     st.info("구 별 최다 기부처")
-    group_gugun_data1 = pd.read_csv('부산구별기부처.csv', encoding='UTF-8')
-    group_gugun_data2 = pd.read_csv('부산구별기부처(금액).csv', encoding='UTF-8')
+    group_gugun_data1 = pd.read_csv('부산구별기부처.csv', encoding='cp949')
+    group_gugun_data2 = pd.read_csv('부산구별기부처(금액).csv', encoding='cp949')
     gu999 = list(group_gugun_data1['통합시군구코드'].unique())
     
     col801, col802 = st.columns([0.1, 0.9])
@@ -549,8 +549,8 @@ with tab2:
         
             
 ### ------------------------------ tab3 내용 구성하기 ---------------------------------------------
-map_df = pd.read_csv('부산광역시_푸드뱅크 및 푸드마켓 현황_20230201.csv', encoding='UTF-8')     
-new = pd.read_csv('부산도소매업(전처리).csv', encoding='UTF-8')
+map_df = pd.read_csv('부산광역시_푸드뱅크 및 푸드마켓 현황_20230201.csv', encoding='cp949')     
+new = pd.read_csv('부산도소매업(전처리).csv', encoding='cp949')
 new_comp_name = list(new['표준산업분류명'].unique())
 new_comp_gugun = list(new['시군구명'].unique())
 
@@ -583,7 +583,7 @@ with tab3:
 
 # # tab4 내용 구성하기
 # with tab4:
-#     data = pd.read_csv('분석전체데이터.csv', encoding="UTF-8")   
+#     data = pd.read_csv('분석전체데이터.csv', encoding="cp949")   
 #     bank_name = list(data['지원센터코드'].unique())
     
 #     # 사업장정보 널기
