@@ -184,7 +184,7 @@ class MyClass:
     # 구 별 최다 기부처 그래프 Top20 함수 7
     def grouping_gugun_graph20(self, gu):
         # 시각화 한글폰트 설정
-        plt.rc('font', family='Malgun Gothic')
+        plt.rcParams['font.family'] = 'Malgun Gothic'
         sns.set(font="Malgun Gothic",#"NanumGothicCoding", 
         rc={"axes.unicode_minus":False}, # 마이너스 부호 깨짐 현상 해결
         style='darkgrid')
@@ -202,7 +202,7 @@ class MyClass:
     # 금액 별 그래프 함수 8
     def grouping_gugun_money_graph20(self, gu):
         # 시각화 한글폰트 설정
-        plt.rc('font', family='Malgun Gothic')
+        plt.rcParams['font.family'] = 'Malgun Gothic'
         sns.set(font="Malgun Gothic",#"NanumGothicCoding", 
         rc={"axes.unicode_minus":False}, # 마이너스 부호 깨짐 현상 해결
         style='darkgrid')
