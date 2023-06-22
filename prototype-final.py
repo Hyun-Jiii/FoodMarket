@@ -58,9 +58,11 @@ class MyClass:
                 result[idx] -= user_data_quantity[i]
 
         test['재고수량'] = result
-        test.set_index(test.columns[0], inplace=True)
-        test_val = test.loc[code_name, '재고수량']
-
+        result_test = test.set_index(test.columns[0])
+        test_val = result_test.loc[code_name, '재고수량']
+        test.drop('장부금액', axis=1, inplace=True)
+        test.to_csv('재고 계산된 기부물품대분류(가짜데이터).csv', index=False, encoding='cp949')
+        
         return test_val
 
     # 기부처 찾기 3
@@ -87,6 +89,47 @@ class MyClass:
         find_new = find_new.reset_index(drop=True)
         return find_new
 
+#     # 지도 함수 6
+#     def find_new_donors_location(self, df):
+#         # 라이브러리
+#         import folium
+#         import webbrowser
+#         from folium import IFrame
+#         import urllib.parse
+
+#         # 맵 생성
+#         map = folium.Map(location=[df['위도'].mean(), df['경도'].mean()], zoom_start=11)
+
+#             # 데이터프레임의 각 위치에 마커 추가
+#         for i in df.index:
+#             name = df.loc[i, '상호명']
+#             gugun = df.loc[i, '시군구명']
+#             location = df.loc[i, '도로명주소']
+#             cls1 = df.loc[i, '표준산업분류명']
+
+#             # 네이버 검색 결과 링크 생성
+#             encoded_name = urllib.parse.quote(name)
+#             naver_search_link = f'https://search.naver.com/search.naver?query={encoded_name}&sm=top_hty&fbm=1&ie=utf8'
+
+#             # 팝업 내용 생성
+#             popup_content = f'<div style="font-family: Arial, sans-serif; font-size: 14px;"> \
+#             상호명 : <a href="{naver_search_link}" target="_blank"> {name}</a><br>{location}</div>'
+#             popup = folium.Popup(popup_content, max_width=250)
+
+#             # IFrame을 사용하여 수평으로 표시되도록 팝업 설정
+#             popup = folium.Popup(IFrame(html=popup_content, width=200, height=80))
+
+#             # 마커 생성 및 팝업 추가
+#             marker = folium.Marker(
+#                     location=[df.loc[i, '위도'], df.loc[i, '경도']],
+#                     icon=folium.Icon(icon='home', color='red'),
+#                     popup=popup
+#             )
+#             marker.add_to(map)
+
+
+#         # 출력 화면에 맵 열기
+#         return folium_static(map)
     # 지도 함수 6
     def find_new_donors_location(self, df):
         # 라이브러리
@@ -95,8 +138,17 @@ class MyClass:
         from folium import IFrame
         import urllib.parse
 
-        # 맵 생성
-        map = folium.Map(location=[df['위도'].mean(), df['경도'].mean()], zoom_start=11)
+        # 지도 객체 생성
+        map = folium.Map(location=[map_df[(map_df['구군명'] == selected_gugun) & (map_df['구분'] == '푸드마켓')]['위도'], 
+                                   map_df[(map_df['구군명'] == selected_gugun) & (map_df['구분'] == '푸드마켓')]['경도']], 
+                                   zoom_start=13)
+        
+        popup_content2 = f'부산 {selected_gugun} 푸드마켓'
+        # 시작 좌표 아이콘 추가
+        folium.Marker(location=[map_df[(map_df['구군명'] == selected_gugun) & (map_df['구분'] == '푸드마켓')]['위도'], 
+                                map_df[(map_df['구군명'] == selected_gugun) & (map_df['구분'] == '푸드마켓')]['경도']], 
+                                icon=folium.Icon(color='blue'),
+                                popup= folium.Popup(popup_content2, max_width=250)).add_to(map)
 
             # 데이터프레임의 각 위치에 마커 추가
         for i in df.index:
@@ -174,73 +226,71 @@ class MyClass:
         pred = model_lgb.predict(test_x)
         return sym_list[pred[0]]
 
-    def predict_map(self):
-        map_df = pd.read_csv('부산광역시_푸드뱅크 및 푸드마켓 현황_20230201.csv', encoding='cp949')
+#     def predict_map(self):
+#         map_df = pd.read_csv('부산광역시_푸드뱅크 및 푸드마켓 현황_20230201.csv', encoding='cp949')
 
-        # 맵 생성
-        map = folium.Map(location=[map_df['위도'].mean(), map_df['경도'].mean()], zoom_start=11)
+#         # 맵 생성
+#         map = folium.Map(location=[map_df['위도'].mean(), map_df['경도'].mean()], zoom_start=11)
 
-        # 데이터프레임의 각 위치에 마커 추가
-        for i in map_df.index:
-            name =map_df.loc[i, '구분']
-            gugun = map_df.loc[i, '구군명']
-            location = map_df.loc[i, '소재지']
-            tel = map_df.loc[i, '연락처']
-            team = map_df.loc[i, '운영단체명']
+#         # 데이터프레임의 각 위치에 마커 추가
+#         for i in map_df.index:
+#             name =map_df.loc[i, '구분']
+#             gugun = map_df.loc[i, '구군명']
+#             location = map_df.loc[i, '소재지']
+#             tel = map_df.loc[i, '연락처']
+#             team = map_df.loc[i, '운영단체명']
 
-            # 팝업 내용 지정(폰트 설정 등..)
-            popup_content = f'<div style="font-family: Arial, sans-serif; font-size: 14px;"> \
-            [{gugun} {name}]<br>{location}<br>Tel. {tel}</div>'
+#             # 팝업 내용 지정(폰트 설정 등..)
+#             popup_content = f'<div style="font-family: Arial, sans-serif; font-size: 14px;"> \
+#             [{gugun} {name}]<br>{location}<br>Tel. {tel}</div>'
 
-            # IFrame을 사용하여 수평으로 표시되도록 팝업 설정
-            popup = folium.Popup(IFrame(html=popup_content, width=200, height=80))
+#             # IFrame을 사용하여 수평으로 표시되도록 팝업 설정
+#             popup = folium.Popup(IFrame(html=popup_content, width=200, height=80))
 
-            # 'bank'와 'market'에 대한 아이콘 정의
-            bank_icon = folium.CustomIcon(icon_image='이미지파일모음/bank.png', icon_size=(25, 25))
-            market_icon = folium.CustomIcon(icon_image='이미지파일모음/market.png', icon_size=(15, 15))
-            center_icon = folium.CustomIcon(icon_image='이미지파일모음/distribution-center.png', icon_size=(15, 15))
-
-
-            if bs_name[:2] in gugun:
-                bank_icon = folium.CustomIcon(icon_image='이미지파일모음/bank.png', icon_size=(45, 45))
-                market_icon = folium.CustomIcon(icon_image='이미지파일모음/market.png', icon_size=(45, 45))
-                center_icon = folium.CustomIcon(icon_image='이미지파일모음/distribution-center.png', icon_size=(45, 45))
-
-            # 이름에 따라 해당하는 아이콘 선택
-            if '광역푸드뱅크' in team:
-                icon = bank_icon
-
-                # 마커 생성 및 팝업 추가
-                marker = folium.Marker(
-                    location=[map_df.loc[i, '위도'], map_df.loc[i, '경도']],
-                    icon=icon,
-                    popup=popup
-                )
-                marker.add_to(map)
-                continue
-
-            if '뱅크' in name:
-                icon = center_icon
-            elif '마켓' in name:
-                icon = market_icon
-            else:
-                icon = None
+#             # 'bank'와 'market'에 대한 아이콘 정의
+#             bank_icon = folium.CustomIcon(icon_image='이미지파일모음/bank.png', icon_size=(25, 25))
+#             market_icon = folium.CustomIcon(icon_image='이미지파일모음/market.png', icon_size=(15, 15))
+#             center_icon = folium.CustomIcon(icon_image='이미지파일모음/distribution-center.png', icon_size=(15, 15))
 
 
+#             if bs_name[:2] in gugun:
+#                 bank_icon = folium.CustomIcon(icon_image='이미지파일모음/bank.png', icon_size=(45, 45))
+#                 market_icon = folium.CustomIcon(icon_image='이미지파일모음/market.png', icon_size=(45, 45))
+#                 center_icon = folium.CustomIcon(icon_image='이미지파일모음/distribution-center.png', icon_size=(45, 45))
 
-            # 마커 생성 및 팝업 추가
-            marker = folium.Marker(
-                location=[map_df.loc[i, '위도'], map_df.loc[i, '경도']],
-                icon=icon,
-                popup=popup
-            )
-            marker.add_to(map)
+#             # 이름에 따라 해당하는 아이콘 선택
+#             if '광역푸드뱅크' in team:
+#                 icon = bank_icon
 
-        # 맵을 HTML 파일로 저장
-        map.save('map.html')
+#                 # 마커 생성 및 팝업 추가
+#                 marker = folium.Marker(
+#                     location=[map_df.loc[i, '위도'], map_df.loc[i, '경도']],
+#                     icon=icon,
+#                     popup=popup
+#                 )
+#                 marker.add_to(map)
+#                 continue
 
-        # Streamlit 앱에서 지도 표시
-        folium_static(map)
+#             if '뱅크' in name:
+#                 icon = center_icon
+#             elif '마켓' in name:
+#                 icon = market_icon
+#             else:
+#                 icon = None
+
+
+
+#             # 마커 생성 및 팝업 추가
+#             marker = folium.Marker(
+#                 location=[map_df.loc[i, '위도'], map_df.loc[i, '경도']],
+#                 icon=icon,
+#                 popup=popup
+#             )
+#             marker.add_to(map)
+
+
+#         # Streamlit 앱에서 지도 표시
+#         folium_static(map)
 # -------------------- ▲ 필요 변수 생성 코딩 End ▲ --------------------
 
 
@@ -263,7 +313,7 @@ p = read_data()
 test = pd.read_csv('기부물품대분류(가짜데이터).csv', encoding='cp949')
 
 # tabs 만들기 
-tab1, tab2, tab3, tab4 = st.tabs(["이용 관리", "재고 확인", "기부처 발굴", "사업장 현황 및 예측"])
+tab1, tab2, tab3 = st.tabs(["이용 관리", "재고 확인", "기부처 발굴"])
 
 ### ------------------------------ tab1 내용 구성하기 ---------------------------------------------
 with tab1:
@@ -277,9 +327,18 @@ with tab1:
     user_data = pd.read_excel('output3.xlsx')
     if st.button('이용자 목록 확인'):
         st.dataframe(user_data)
+        # 당일 이용자 뽑기
+        today_object = today.strftime('%Y-%m-%d')
+        count = user_data['날짜'].str.replace('.', '-')
+        cnt = 0
+        for i in count:
+            if i == today_object:
+                cnt += 1
+
+        st.write(f'**당일 총 이용자는 {cnt}명 입니다.**')
+    
     
     st.info('**이용자 추가 입력**')
-    # st.info('이용자 추가 입력')
     
     # 컬럼을 정의합니다.
     col1, col2, col3,col4,col5 = st.columns(5)
@@ -338,19 +397,24 @@ with tab1:
     
         
     # 입력을 완료하고 저장할 수 있는 버튼을 추가합니다.
+   
     if st.button('Save to excel'):
         # DataFrame을 엑셀 파일로 저장합니다.
         if os.path.exists('output3.xlsx'):
             df_input = pd.read_excel('output3.xlsx')
             new_df = pd.DataFrame([new_input])
             df_input = pd.concat([df_input, new_df], ignore_index=True)
+            
+                
         else:
             df_input = pd.DataFrame([new_input])
 
         df_input.to_excel('output3.xlsx', index=False)
         st.success("Data saved successfully!")
-        st.experimental_rerun()    
-          
+        st.experimental_rerun()
+        
+        
+        
 
     
 ### ------------------------------ tab2 내용 구성하기 ---------------------------------------------
@@ -485,6 +549,7 @@ with tab2:
         
             
 ### ------------------------------ tab3 내용 구성하기 ---------------------------------------------
+map_df = pd.read_csv('부산광역시_푸드뱅크 및 푸드마켓 현황_20230201.csv', encoding='cp949')     
 new = pd.read_csv('부산도소매업(전처리).csv', encoding='cp949')
 new_comp_name = list(new['표준산업분류명'].unique())
 new_comp_gugun = list(new['시군구명'].unique())
@@ -516,70 +581,70 @@ with tab3:
         
 ### ------------------------------ tab4 내용 구성하기 ---------------------------------------------
 
-# tab4 내용 구성하기
-with tab4:
-    data = pd.read_csv('분석전체데이터.csv', encoding="cp949")   
-    bank_name = list(data['지원센터코드'].unique())
+# # tab4 내용 구성하기
+# with tab4:
+#     data = pd.read_csv('분석전체데이터.csv', encoding="cp949")   
+#     bank_name = list(data['지원센터코드'].unique())
     
-    # 사업장정보 널기
-    st.markdown("### 사업장 정보 입력")
+#     # 사업장정보 널기
+#     st.markdown("### 사업장 정보 입력")
 
-    ## -------------------- ▼ 입력창 ▼ --------------------
-    try: 
-        col1, col2 ,col3= st.columns([0.1, 0.3, 0.5])
-        with col1:
-            st.info("사업장명")
-        with col2:
-            bs_name = st.selectbox('사업장', bank_name, label_visibility="collapsed", key="unique_key_1")
+#     ## -------------------- ▼ 입력창 ▼ --------------------
+#     try: 
+#         col1, col2 ,col3= st.columns([0.1, 0.3, 0.5])
+#         with col1:
+#             st.info("사업장명")
+#         with col2:
+#             bs_name = st.selectbox('사업장', bank_name, label_visibility="collapsed", key="unique_key_1")
 
-        col4, col5, col6 = st.columns([0.1, 0.3, 0.5])
-        with col4:
-            st.info("기부자수")
-        with col5:
-            donater = st.text_input("기부자수", label_visibility="collapsed")
-
-
-        col7, col8, col9 = st.columns([0.1, 0.3, 0.5])
-        with col7:
-            st.info("제공금액")
-        with col8:
-            money1 = st.text_input("제공금액", value='', label_visibility="collapsed")
+#         col4, col5, col6 = st.columns([0.1, 0.3, 0.5])
+#         with col4:
+#             st.info("기부자수")
+#         with col5:
+#             donater = st.text_input("기부자수", label_visibility="collapsed")
 
 
-        col10, col11, col12 = st.columns([0.1, 0.3, 0.5])
-        with col10:
-            st.info("이관금액")
-        with col11:
-            money2 = st.text_input("이관금액", value='', label_visibility="collapsed")
+#         col7, col8, col9 = st.columns([0.1, 0.3, 0.5])
+#         with col7:
+#             st.info("제공금액")
+#         with col8:
+#             money1 = st.text_input("제공금액", value='', label_visibility="collapsed")
 
-        col13, col14, col15 = st.columns([0.1, 0.3, 0.5])
-        with col13:
-            st.info('장부수량')
-        with col14:
-            remain = st.text_input('장부수량', value='', label_visibility="collapsed")
+
+#         col10, col11, col12 = st.columns([0.1, 0.3, 0.5])
+#         with col10:
+#             st.info("이관금액")
+#         with col11:
+#             money2 = st.text_input("이관금액", value='', label_visibility="collapsed")
+
+#         col13, col14, col15 = st.columns([0.1, 0.3, 0.5])
+#         with col13:
+#             st.info('장부수량')
+#         with col14:
+#             remain = st.text_input('장부수량', value='', label_visibility="collapsed")
             
     
     
-    ## -------------------- ▼ 예측 ▼ --------------------
-        dic = {
-        '기부자수':[int(donater)],
-        '제공금액':[int(money1)], 
-        '이관금액':[int(money2)],
-        '장부수량':[int(remain)],
-        '사업장유형':['']
-        }
+#     ## -------------------- ▼ 예측 ▼ --------------------
+#         dic = {
+#         '기부자수':[int(donater)],
+#         '제공금액':[int(money1)], 
+#         '이관금액':[int(money2)],
+#         '장부수량':[int(remain)],
+#         '사업장유형':['']
+#         }
    
         
-        if st.button('예측하기'):
-            df = pd.DataFrame(dic)
-            st.write(f'{bs_name}는 **{p.predict_bussiness(df)}** 사업장으로 예측됩니다.')
-            if p.predict_bussiness(df) == '임의':
-                st.image('이미지파일모음/goodbank2.jpg')
+#         if st.button('예측하기'):
+#             df = pd.DataFrame(dic)
+#             st.write(f'{bs_name}는 **{p.predict_bussiness(df)}** 사업장으로 예측됩니다.')
+#             if p.predict_bussiness(df) == '임의':
+#                 st.image('이미지파일모음/goodbank2.jpg')
     
-    except:
-        st.write('숫자를 입력하세요.')
-    ### ------------------------------지도생성-----------------------------------
+#     except:
+#         st.write('숫자를 입력하세요.')
+#     ### ------------------------------지도생성-----------------------------------
 
 
-    p.predict_map()
+#     p.predict_map()
      
