@@ -7,4 +7,3 @@ matplotlib
 seaborn
 joblib
 openpyxl
-font_manager
