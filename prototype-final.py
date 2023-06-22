@@ -29,7 +29,7 @@ class MyClass:
     
     # 재고 수량 함수 1
     def inventory(self, code_name):
-        test = pd.read_csv('기부물품대분류(가짜데이터).csv', encoding='cp949')
+        test = pd.read_csv('기부물품대분류(가짜데이터).csv', encoding='UTF-8')
         test.set_index(test.columns[0], inplace=True)
         return test.loc[code_name, '재고수량']
 
