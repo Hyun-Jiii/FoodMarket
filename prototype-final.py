@@ -15,6 +15,7 @@ from datetime import date
 from streamlit_folium import folium_static
 import re
 import joblib
+from matplotlib import font_manager, rc
 
 # 시각화 한글폰트 설정
 plt.rc('font', family='Malgun Gothic')
@@ -23,6 +24,10 @@ sns.set(font="Malgun Gothic",#"NanumGothicCoding",
 rc={"axes.unicode_minus":False}, # 마이너스 부호 깨짐 현상 해결
 style='darkgrid')
 
+# 한글 폰트
+path = '../font/Malgun Gothic.ttf'
+font_name = font_manager.FontProperties(fname = path).get_name()
+rc('font', family=font_name)
 
 class MyClass:
     def __init__(self):
@@ -185,10 +190,7 @@ class MyClass:
     # 구 별 최다 기부처 그래프 Top20 함수 7
     def grouping_gugun_graph20(self, gu):
         # 시각화 한글폰트 설정
-        plt.rcParams['font.family'] = 'Malgun Gothic'
-        sns.set(font="Malgun Gothic",
-                rc={"axes.unicode_minus":False}, # 마이너스 부호 깨짐 현상 해결
-                style='darkgrid')
+        fontprop = font_manger.FontProperties(fname=path)
 
         top20 = group_gugun_data1[group_gugun_data1['통합시군구코드'] == gu].sort_values('기부건수', ascending=False).head(20)
         fig = plt.figure()
