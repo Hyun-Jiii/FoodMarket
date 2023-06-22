@@ -184,7 +184,7 @@ class MyClass:
     # 구 별 최다 기부처 그래프 Top20 함수 7
     def grouping_gugun_graph20(self, gu):
 
-
+        sns.set(rc = {'font.family':'NanumGothicCoding'})
         top20 = group_gugun_data1[group_gugun_data1['통합시군구코드'] == gu].sort_values('기부건수', ascending=False).head(20)
         fig = plt.figure()
         fig.set_dpi(300) # DPI 값을 조정하여 레티나 품질로 설정
