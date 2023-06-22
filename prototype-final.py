@@ -15,24 +15,9 @@ from datetime import date
 from streamlit_folium import folium_static
 import re
 import joblib
-# 폰트 관련 용도 as fm
-import matplotlib.font_manager as fm 
-
-# Fonts 파일에서 불러오기
-@st.cache_data
-def fontRegistered():
-    font_dirs = '/Fonts'
-    font_files = fm.findSystemFonts(fontpaths=font_dirs)
-
-    for font_file in font_files:
-        fm.fontManager.addfont(font_file)
-    fm._load_fontmanager(try_read_cache=False)
 
 # 시각화 한글폰트 설정
-fontRegistered()
-fontname = st.selectbox("폰트 선택", unique(fontNames))
-
-plt.rcParams['font.family'] = fontname
+plt.rc('font', family='Malgun Gothic')
 sns.set(font="Malgun Gothic",#"NanumGothicCoding", 
 rc={"axes.unicode_minus":False}, # 마이너스 부호 깨짐 현상 해결
 style='darkgrid')
@@ -204,10 +189,7 @@ class MyClass:
         fig = plt.figure()
         fig.set_dpi(300) # DPI 값을 조정하여 레티나 품질로 설정
         sns.barplot(data=top20, x='기부건수', y='기부자명')
-        plt.title('기부건수 별', fontproperties=font_prop)
-        plt.xlabel('기부건수', fontproperties=font_prop)
-        plt.ylabel('기부자명', fontproperties=font_prop)
-        plt.tight_layout()
+        plt.title('기부건수 별')
         plt.show()
 
         return st.pyplot(fig)
