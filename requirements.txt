@@ -1,5 +1,7 @@
-/home/appuser/venv/bin/python -m pip install --upgrade pip
-python - m pip install -- upgrade pip
-pip install -- upgrade streamlit
-pip install -r requirements.txt
-pip install streamlit folium
+streamlit
+numpy
+pandas
+streamlit_folium
+folium
+seaborn
+joblib
