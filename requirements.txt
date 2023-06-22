@@ -1,4 +1,4 @@
-/home/appuser/venv/bin/python -m pip install --upgrade pip
+python -m pip install --upgrade pip
 Found Streamlit version 1.23.1 in the environment
 pip install -r requirements.txt
 pip install streamlit folium
