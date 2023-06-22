@@ -3,6 +3,7 @@ numpy
 pandas
 streamlit_folium
 folium
+matplotlib
 seaborn
 joblib
 openpyxl
