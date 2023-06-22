@@ -6,4 +6,3 @@ folium
 seaborn
 joblib
 openpyxl
-$git config --global gui.encoding utf-8
