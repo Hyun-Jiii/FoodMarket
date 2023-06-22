@@ -16,6 +16,13 @@ from streamlit_folium import folium_static
 import re
 import joblib
 
+# 한글폰트 불러오기
+import matplotlib.font_manager as fm
+fm.get_fontconfig_fonts()
+font_location = '../font/malgun.ttf' # For Windows
+font_name = fm.FontProperties(fname=font_location).get_name()
+matplotlib.rc('font', family=font_name)
+
 # 시각화 한글폰트 설정
 plt.rc('font', family='Malgun Gothic')
 sns.set(font="Malgun Gothic",#"NanumGothicCoding", 
