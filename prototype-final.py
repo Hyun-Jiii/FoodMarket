@@ -188,8 +188,7 @@ class MyClass:
         plt.rcParams['font.family'] = 'Malgun Gothic'
         sns.set(font="Malgun Gothic",
                 rc={"axes.unicode_minus":False}, # 마이너스 부호 깨짐 현상 해결
-                style='darkgrid',
-                encoding = 'cp949')
+                style='darkgrid')
 
         top20 = group_gugun_data1[group_gugun_data1['통합시군구코드'] == gu].sort_values('기부건수', ascending=False).head(20)
         fig = plt.figure()
