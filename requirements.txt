@@ -6,5 +6,4 @@ folium
 seaborn
 joblib
 openpyxl
-fm
-matplotlib.font_manager
+font_manager
