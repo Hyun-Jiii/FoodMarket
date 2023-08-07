@@ -1,4 +1,5 @@
 # FoodMarket
 aivle school 35조
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/65ea5a3b-ac5c-4f61-b8cd-64a8fd41b1bb/Untitled.png)
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ec2a32e9-cf4f-464c-8426-986a33956b04/Untitled.png)
+
+![푸드마켓_썸네일](https://github.com/Hyun-Jiii/FoodMarket/assets/81578775/8c108c85-125f-473a-b222-6f64ef4c6bac)
+![푸드마켓_포스터](https://github.com/Hyun-Jiii/FoodMarket/assets/81578775/d420913e-1cf1-4254-8c8f-850846acfff8)
